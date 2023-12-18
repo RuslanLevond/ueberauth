@@ -200,11 +200,11 @@ defmodule Ueberauth do
   A json library is required for Ueberauth to operate.
   In config.exs your implicit or expicit configuration is:
 
-    config :ueberauth, Ueberauth, json_library: Jason 
+    config :ueberauth, Ueberauth, json_library: Jason
 
   Or:
 
-    config :ueberauth, json_library: Jason 
+    config :ueberauth, json_library: Jason
 
   If you are using per-app configuration, you can also use:
 
@@ -306,8 +306,10 @@ defmodule Ueberauth do
   end
 
   defp run(conn, {module, :run_request, options}) do
-    to_request_path = Path.join(["/", conn.script_name, options.request_path])
-    to_callback_path = Path.join(["/", conn.script_name, options.callback_path])
+    route_base_path = Enum.map_join(conn.script_name, &"/#{&1}")
+
+    to_request_path = Path.join(["/", route_base_path, options.request_path])
+    to_callback_path = Path.join(["/", route_base_path, options.callback_path])
     to_options = %{options | request_path: to_request_path, callback_path: to_callback_path}
 
     conn
@@ -316,8 +318,10 @@ defmodule Ueberauth do
   end
 
   defp run(conn, {module, :run_callback, options}) do
-    to_request_path = Path.join(["/", conn.script_name, options.request_path])
-    to_callback_path = Path.join(["/", conn.script_name, options.callback_path])
+    route_base_path = Enum.map_join(conn.script_name, &"/#{&1}")
+
+    to_request_path = Path.join(["/", route_base_path, options.request_path])
+    to_callback_path = Path.join(["/", route_base_path, options.callback_path])
     to_options = %{options | request_path: to_request_path, callback_path: to_callback_path}
 
     conn
